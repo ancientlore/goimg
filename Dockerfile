@@ -1,7 +1,9 @@
 FROM golang:1.16 AS builder
 
-RUN apt-get update -y && apt-get upgrade -y && update-ca-certificates
+# Print version of Go
+RUN go version
 
+# Setup folders
 RUN mkdir -p /home/distroless
 WORKDIR /home/distroless
 RUN mkdir -m 1777 tmp
@@ -21,18 +23,20 @@ RUN echo 'nonroot:x:65532:65532:nonroot:/home/nonroot:/sbin/nologin' >> ./etc/pa
     && chown 65532:65532 ./home \
     && chown -R 65532:65532 ./home/nonroot
 
+# Fetch CCADB Root CA trust bundle into the first location Go likes
+RUN mkdir -p ./etc/ssl/certs/ && curl -L https://ccadb-public.secure.force.com/mozilla/IncludedRootsPEMTxt?TrustBitsInclude=Websites > ./etc/ssl/certs/ca-certificates.crt
+
+# Copy time zone data file for Go
+RUN cp /usr/local/go/lib/time/zoneinfo.zip ./etc/
+
+# At this point the /home/distroless folder has all the files we need.
+
 # Build the output image from scratch
 FROM scratch
 WORKDIR /
 
 # Copy distroless image files
 COPY --from=builder /home/distroless /
-
-# Copy SSL certs
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-
-# Copy time zone data file for Go
-COPY --from=builder /usr/local/go/lib/time/zoneinfo.zip /etc/
 
 # Set time zone environment for Go
 ENV ZONEINFO=/etc/zoneinfo.zip
