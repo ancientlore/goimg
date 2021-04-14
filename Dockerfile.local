@@ -3,6 +3,6 @@ COPY . /go/test
 WORKDIR /go/test
 RUN CGO_ENABLED=0 go build -o /go/bin/test
 
-FROM ancientlore/goimg:latest
+FROM goimg:latest
 COPY --from=builder /go/bin/test /usr/bin/test
 CMD [ "/usr/bin/test"]
