@@ -9,9 +9,6 @@ WORKDIR /home/distroless
 RUN mkdir -m 1777 tmp
 RUN mkdir -p etc
 
-# Add user so that ownership transfers
-RUN addgroup --gid 65532 nonroot && adduser --uid 65532 --gid 65532 nonroot
-
 # Setup root user, group, and folder
 RUN echo 'root:x:0:0:root:/root:/sbin/nologin' > ./etc/passwd \
     && echo 'root:x:0:' > ./etc/group \
@@ -38,7 +35,8 @@ RUN cp /usr/local/go/lib/time/zoneinfo.zip ./etc/
 FROM scratch
 WORKDIR /
 
-# Copy distroless image files
+# Copy distroless image files (make sure passwd and group land first)
+COPY --from=builder /home/distroless/etc /etc
 COPY --from=builder /home/distroless /
 
 # Set time zone environment for Go
