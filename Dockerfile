@@ -36,8 +36,8 @@ FROM scratch
 WORKDIR /
 
 # Copy distroless image files (make sure passwd and group land first)
-COPY --from=builder /home/distroless/etc /etc
 COPY --from=builder /home/distroless /
+COPY --from=builder --chown=nonroot:nonroot /home/distroless/home /home
 
 # Set time zone environment for Go
 ENV ZONEINFO=/etc/zoneinfo.zip
