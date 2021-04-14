@@ -9,6 +9,9 @@ WORKDIR /home/distroless
 RUN mkdir -m 1777 tmp
 RUN mkdir -p etc
 
+# Add user so that ownership transfers
+RUN addgroup --gid 65532 nonroot && adduser --uid 65532 --gid 65532 nonroot
+
 # Setup root user, group, and folder
 RUN echo 'root:x:0:0:root:/root:/sbin/nologin' > ./etc/passwd \
     && echo 'root:x:0:' > ./etc/group \
