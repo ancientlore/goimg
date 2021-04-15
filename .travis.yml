@@ -1,5 +1,15 @@
+language: go
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 services:
   - docker
+
+go:
+  - 1.16.x
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
