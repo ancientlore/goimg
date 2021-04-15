@@ -13,5 +13,7 @@ go:
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build --force-rm=false --rm=false -t ancientlore/goimg:${TRAVIS_TAG:-latest} .
+  - docker build -t ancientlore/goimg:${TRAVIS_TAG:-latest} .
+  - docker build -t test -f Dockerfile.test .
+  - docker run -it --rm test
   - docker push ancientlore/goimg:${TRAVIS_TAG:-latest}
