@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"os"
@@ -11,12 +12,21 @@ import (
 )
 
 func main() {
+	failed := test()
+	if failed {
+		log.Fatal("*** Tests Failed ***")
+	}
+}
+
+func test() (failed bool) {
+	failed = false
 
 	// Test if current user works.
 	fmt.Println("Test current user")
 	u, err := user.Current()
 	if err != nil {
 		fmt.Printf("Error loading user: %v\n", err)
+		failed = true
 	} else {
 		fmt.Printf("Loaded user %+v\n", u)
 	}
@@ -28,6 +38,7 @@ func main() {
 		loc, err := time.LoadLocation(zone)
 		if err != nil {
 			fmt.Printf("Error loading time zone: %v\n", err)
+			failed = true
 		} else {
 			fmt.Printf("Loaded time zone: %+v\n", loc)
 			t := time.Now()
@@ -42,6 +53,7 @@ func main() {
 	addrs, err := net.LookupHost(host)
 	if err != nil {
 		fmt.Printf("Could not look up host %q: %v\n", host, err)
+		failed = true
 	} else {
 		fmt.Printf("Addresses of host %q: %+v\n", host, addrs)
 	}
@@ -52,6 +64,7 @@ func main() {
 	resp, err := http.Get(site)
 	if err != nil {
 		fmt.Printf("HTTPS request to %q failed: %v\n", site, err)
+		failed = true
 	} else {
 		defer resp.Body.Close()
 		fmt.Printf("HTTPS server %q responded: %s\n", site, resp.Status)
@@ -62,11 +75,13 @@ func main() {
 	f, err := os.CreateTemp("", "test")
 	if err != nil {
 		fmt.Printf("Cannot create temp file: %v\n", err)
+		failed = true
 	} else {
 		defer func() {
 			err := f.Close()
 			if err != nil {
 				fmt.Printf("Cannot close temp file: %v\n", err)
+				failed = true
 			}
 		}()
 
@@ -74,10 +89,12 @@ func main() {
 		_, err = f.WriteString("Hello\n")
 		if err != nil {
 			fmt.Printf("Cannot write to temp file: %v\n", err)
+			failed = true
 		}
 		err = f.Sync()
 		if err != nil {
 			fmt.Printf("Cannot write to temp file: %v\n", err)
+			failed = true
 		}
 	}
 
@@ -86,16 +103,19 @@ func main() {
 	home := os.Getenv("HOME")
 	if home == "" {
 		fmt.Printf("$HOME is not set\n")
+		failed = true
 	}
 	fname := filepath.Join(home, "hello.txt")
 	lf, err := os.OpenFile(fname, os.O_CREATE|os.O_RDWR, 0600)
 	if err != nil {
 		fmt.Printf("Cannot create file: %v\n", err)
+		failed = true
 	} else {
 		defer func() {
 			err := lf.Close()
 			if err != nil {
 				fmt.Printf("Cannot close file: %v\n", err)
+				failed = true
 			}
 		}()
 
@@ -103,10 +123,12 @@ func main() {
 		_, err = lf.WriteString("Hello\n")
 		if err != nil {
 			fmt.Printf("Cannot write to file: %v\n", err)
+			failed = true
 		}
 		err = lf.Sync()
 		if err != nil {
 			fmt.Printf("Cannot sync file: %v\n", err)
+			failed = true
 		}
 	}
 
@@ -115,6 +137,7 @@ func main() {
 	dir, err := os.Getwd()
 	if err != nil {
 		fmt.Printf("Cannot get working dir: %v\n", err)
+		failed = true
 	} else {
 		fmt.Printf("Working dir is %q\n", dir)
 	}
@@ -126,4 +149,5 @@ func main() {
 		fmt.Println(ev)
 	}
 
+	return
 }
