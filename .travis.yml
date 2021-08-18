@@ -9,7 +9,7 @@ services:
   - docker
 
 go:
-  - 1.16.x
+  - 1.17.x
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
