@@ -1,4 +1,6 @@
-FROM golang:1.17 AS builder
+ARG GO_VERSION=1.17
+
+FROM golang:${GO_VERSION} AS builder
 
 # Print version of Go
 RUN go version
