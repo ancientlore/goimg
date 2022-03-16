@@ -9,7 +9,7 @@ services:
   - docker
 
 go:
-  - 1.17.x
+  - 1.18.x
 
 script:
   - GO_VERSION=$(go env GOVERSION | sed s/^go//)
