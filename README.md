@@ -13,16 +13,16 @@ Small Go image to use when CGO isn't needed.
 
 The image is tagged with the major Go version because that indicates which `zoneinfo.zip` is included.
 
-    docker pull ancientlore/goimg:1.19
+    docker pull ancientlore/goimg:1.20
 
 Presumably you would put your Go binary into `/usr/bin` or `/bin`. A sample Dockerfile might be:
 
-    FROM golang:1.19 as builder
+    FROM golang:1.20 as builder
     COPY . /go/test
     WORKDIR /go/test
     RUN CGO_ENABLED=0 go build -o /go/bin/test
 
-    FROM ancientlore/goimg:1.19
+    FROM ancientlore/goimg:1.20
     COPY --from=builder /go/bin/test /usr/bin/test
     CMD [ "/usr/bin/test"]
 
