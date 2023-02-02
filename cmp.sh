@@ -3,7 +3,7 @@ GO_VERSION=$1
 
 if [ "$GO_VERSION" = "" ]
 then
-    GO_VERSION=1.19
+    GO_VERSION=1.20
 fi
 
 docker run --name gcr gcr.io/distroless/static:nonroot /foo
