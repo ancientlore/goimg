@@ -16,10 +16,6 @@ if [ "$GO_VERSION" != "$VERSION" ]; then
     docker tag ancientlore/goimg:$GO_VERSION ancientlore/goimg:$VERSION || exit 1
 fi
 
-echo
-echo Tagging ancientlore/goimg:latest
-docker tag ancientlore/goimg:$GO_VERSION ancientlore/goimg:latest || exit 1
-
 gum confirm "Test?" || exit 1
 
 echo
@@ -31,6 +27,10 @@ echo Running test image goimgtest:$VERSION
 docker run -it --rm goimgtest:$VERSION || exit 1
 
 gum confirm "Push?" || exit 1
+
+echo
+echo Tagging ancientlore/goimg:latest
+docker tag ancientlore/goimg:$GO_VERSION ancientlore/goimg:latest || exit 1
 
 echo
 echo Pushing ancientlore/goimg:$GO_VERSION
