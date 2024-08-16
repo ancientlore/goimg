@@ -1,6 +1,6 @@
-ARG GO_VERSION=1.20
+ARG GO_VERSION=1.23
 
-FROM golang:${GO_VERSION} as builder
+FROM golang:${GO_VERSION} AS builder
 COPY . /go/test
 WORKDIR /go/test
 RUN CGO_ENABLED=0 go build -o /go/bin/test

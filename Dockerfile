@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.20
+ARG GO_VERSION=1.23
 
 FROM golang:${GO_VERSION} AS builder
 
@@ -36,7 +36,7 @@ RUN cp /usr/local/go/lib/time/zoneinfo.zip ./0/etc/
 # At this point the /home/distroless folder has all the files we need.
 
 # Build the output image from scratch
-FROM scratch as final
+FROM scratch AS final
 WORKDIR /
 ENV PATH=/usr/bin:/bin
 ENV HOME=/home
