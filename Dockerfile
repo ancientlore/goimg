@@ -1,6 +1,6 @@
 ARG GO_VERSION=1.23
 
-FROM golang:${GO_VERSION} AS builder
+FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
 
 # Print version of Go
 RUN go version

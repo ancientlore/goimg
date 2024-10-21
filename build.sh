@@ -8,7 +8,7 @@ echo Go version is $GO_VERSION, major version is $VERSION
 
 echo
 echo Building ancientlore/goimg:$GO_VERSION
-docker build --build-arg GO_VERSION=$GO_VERSION -t ancientlore/goimg:$GO_VERSION . || exit 1
+docker buildx build --build-arg GO_VERSION=$GO_VERSION --platform linux/amd64,linux/arm64 -t ancientlore/goimg:$GO_VERSION . || exit 1
 
 if [ "$GO_VERSION" != "$VERSION" ]; then
     echo
@@ -20,7 +20,7 @@ gum confirm "Test?" || exit 1
 
 echo
 echo Building test image goimgtest:$VERSION
-docker build --build-arg GO_VERSION=$GO_VERSION -t goimgtest:$VERSION -f Dockerfile.test . || exit 1
+docker buildx build --build-arg GO_VERSION=$GO_VERSION -t goimgtest:$VERSION -f Dockerfile.test . || exit 1
 
 echo
 echo Running test image goimgtest:$VERSION
