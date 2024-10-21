@@ -1,10 +1,10 @@
 ARG GO_VERSION=1.23
 
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
+FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION} AS builder
 COPY . /go/test
 WORKDIR /go/test
 ARG TARGETOS TARGETARCH
-RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -o /go/bin/test
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} CGO_ENABLED=0 go build -o /go/bin/test
 
 FROM ancientlore/goimg:${GO_VERSION}
 COPY --from=builder /go/bin/test /usr/bin/test

@@ -1,6 +1,6 @@
 ARG GO_VERSION=1.23
 
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
+FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION} AS builder
 
 # Print version of Go
 RUN go version
@@ -13,6 +13,7 @@ RUN mkdir -m 1777 0/tmp
 RUN mkdir -p 0/etc
 RUN mkdir -p 0/bin
 RUN mkdir -p 0/usr/bin
+RUN mkdir -p 0/usr/local/bin
 
 # Setup root user, group, and folder
 RUN echo 'root:x:0:0:root:/root:/sbin/nologin' > ./0/etc/passwd \
@@ -38,7 +39,7 @@ RUN cp /usr/local/go/lib/time/zoneinfo.zip ./0/etc/
 # Build the output image from scratch
 FROM scratch AS final
 WORKDIR /
-ENV PATH=/usr/bin:/bin
+ENV PATH=/usr/local/bin:/usr/bin:/bin
 ENV HOME=/home
 
 # Copy distroless image files (make sure passwd and group land first)
