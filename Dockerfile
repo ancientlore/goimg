@@ -29,7 +29,7 @@ RUN echo 'nonroot:x:65532:65532:Nonroot User:/home:/sbin/nologin' >> ./0/etc/pas
     && chown -R 65532:65532 ./65532/home
 
 # Fetch CCADB Root CA trust bundle into the first location Go likes
-RUN mkdir -p ./0/etc/ssl/certs/ && curl -L https://ccadb-public.secure.force.com/mozilla/IncludedRootsPEMTxt?TrustBitsInclude=Websites > ./0/etc/ssl/certs/ca-certificates.crt
+RUN mkdir -p ./0/etc/ssl/certs/ && curl -L https://ccadb.my.salesforce-sites.com/mozilla/IncludedRootsPEMTxt?TrustBitsInclude=Websites > ./0/etc/ssl/certs/ca-certificates.crt
 
 # Copy time zone data file for Go
 RUN cp /usr/local/go/lib/time/zoneinfo.zip ./0/etc/
